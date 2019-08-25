@@ -16,7 +16,7 @@
             <input type="password" id="password" v-model="password">
             <label  for="password">Password</label>
           </div>
-          <button v-on:click="login" class="btn btn-large btn-extended grey lighten-4 black-text">Register</button>
+          <button v-on:click="register" class="btn btn-large btn-extended grey lighten-4 black-text">Register</button>
         </form>
       </div>
     </div>
@@ -26,10 +26,32 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
   name: 'register',
   data: function() {
-    return {};
+    return {
+      email: '',
+      password: ''
+    };
+  },
+  methods: {
+    register: function(e) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(
+          user => {
+            // console.log(user);
+            alert(`Account Created for ${this.email}`);
+            this.$router.go({ path: this.$router.path });
+          },
+          err => {
+            alert(err.message);
+          }
+        );
+      e.preventDefault();
+    }
   }
 };
 </script>
